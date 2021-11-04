@@ -87,18 +87,61 @@ public:
 	
 
 	// Methods
-	void to_proper()
+	Fraction& to_proper()
 	{
 		//переводит дробь в правильную
 		integer += numerator / denominator;
 		numerator %= denominator;
+		return *this;
 	}
-	void to_improper()
+	Fraction& to_improper()
 	{
 		//переводит дробь в неправильную
 		numerator += integer * denominator;
 		integer = 0;
+		return *this;
 	}
+	Fraction& invert()
+	{
+		to_improper();
+		int buffer = numerator;
+		numerator = denominator;
+		denominator = buffer;
+		return *this;
+	}
+	Fraction& operator*=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator *= other.numerator;
+		this->denominator *= other.denominator;
+		return this->to_proper();
+	}
+	Fraction& operator/=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator *= other.denominator;
+		this->denominator *= other.numerator;
+		return this->to_proper();
+	}
+	Fraction operator+=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator = numerator * other.denominator + this->denominator * other.numerator;
+		this->denominator *= other.denominator;
+		return this->to_proper();
+	}
+	Fraction operator-=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator = numerator * other.denominator - this->denominator * other.numerator;
+		this->denominator *= other.denominator;
+		return this->to_proper();
+	}
+
 	void reduce()
 	{
 		//сокращает дробь
@@ -150,7 +193,6 @@ ostream& operator<<(ostream& os, const Fraction& obj)
 		if (obj.get_integer())cout << ")";
 	}
 	else if (obj.get_integer() == 0)cout << 0;
-	cout << endl;
 	return os;
 }
 
@@ -166,18 +208,45 @@ istream& operator>>(istream& is, Fraction& obj)
 	return is;
 }
 
-Fraction operator*(Fraction& left, Fraction& right)
+Fraction operator*(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
-	return Fraction(left.get_numerator() * right.get_numerator(), left.get_denominator() * right.get_denominator());
+	/*Fraction result
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	);*/
+	//result.set_numerator(left.get_numerator() * right.get_numerator());
+	//result.set_denominator(left.get_denominator() * right.get_denominator());
+	//result.to_proper();
+	//return result;
+	return Fraction
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	).to_proper();
 }
 
-Fraction operator/(Fraction& left, Fraction& right)
+Fraction operator/(Fraction left, Fraction right)
 {
 	left.to_improper();
 	right.to_improper();
-	return Fraction(left.get_numerator() / right.get_numerator(), left.get_denominator() / right.get_denominator());
+	/*Fraction result
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	);*/
+	//result.set_numerator(left.get_numerator() * right.get_numerator());
+	//result.set_denominator(left.get_denominator() * right.get_denominator());
+	//result.to_proper();
+	//return result;
+	/*return Fraction
+	(
+		left.get_numerator() * right.get_denominator(),
+		left.get_denominator() * right.get_numerator()
+	).to_proper();*/
+	return left * right.invert();
 }
 
 Fraction operator+(const Fraction& left, const Fraction& right)
@@ -213,9 +282,9 @@ void main()
 	//A.to_improper();
 	////A.print();
 	//cout << A << endl;
-	Fraction A(4, 8);
-	Fraction B(1, 3);
-	Fraction C = A * B;
+	Fraction A(2, 3);
+	Fraction B(2, 5);
+	/*Fraction C = A * B;
 	cout << C << endl;
 	Fraction D = A / B;
 	cout << D << endl;
@@ -232,5 +301,7 @@ void main()
 	Fraction J;
 	cout << "Введите значения дроби: ";
 	cin >> J;
-	cout << J << endl;
+	cout << J << endl;*/
+	A -= B;
+	cout << A << endl;
 }
