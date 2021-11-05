@@ -47,7 +47,7 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		this->integer = integer;
 		this->numerator = 0;
@@ -96,6 +96,72 @@ public:
 	{
 		return *this = *this / other;
 	}
+	Fraction operator+=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator = numerator * other.denominator + this->denominator * other.numerator;
+		this->denominator *= other.denominator;
+		return this->to_proper();
+	}
+	Fraction operator-=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator = numerator * other.denominator - this->denominator * other.numerator;
+		this->denominator *= other.denominator;
+		return this->to_proper();
+	}
+	/*Fraction& operator*=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator *= other.numerator;
+		this->denominator *= other.denominator;
+		return this->to_proper();
+	}
+	Fraction& operator/=(Fraction other)
+	{
+		this->to_improper();
+		other.to_improper();
+		this->numerator *= other.denominator;
+		this->denominator *= other.numerator;
+		return this->to_proper();
+	}*/
+	Fraction& operator++()
+	{
+		to_proper();
+		integer++;
+		return *this;
+	}
+	Fraction operator++(int)
+	{
+		to_proper();
+		Fraction buffer = *this;
+		integer++;
+		return buffer;
+	}
+	Fraction& operator--()
+	{
+		integer--;
+		return *this;
+	}
+	Fraction operator--(int)
+	{
+		Fraction buffer = *this;
+		integer--;
+		return buffer;
+	}
+
+	// Type-cast
+	explicit operator int()const
+	{
+		return integer;
+	}
+	operator double()const
+	{
+		return integer + (double)numerator / denominator;
+	}
 
 	// Methods
 	Fraction& to_proper()
@@ -119,38 +185,6 @@ public:
 		numerator = denominator;
 		denominator = buffer;
 		return *this;
-	}
-	/*Fraction& operator*=(Fraction other)
-	{
-		this->to_improper();
-		other.to_improper();
-		this->numerator *= other.numerator;
-		this->denominator *= other.denominator;
-		return this->to_proper();
-	}
-	Fraction& operator/=(Fraction other)
-	{
-		this->to_improper();
-		other.to_improper();
-		this->numerator *= other.denominator;
-		this->denominator *= other.numerator;
-		return this->to_proper();
-	}*/
-	Fraction operator+=(Fraction other)
-	{
-		this->to_improper();
-		other.to_improper();
-		this->numerator = numerator * other.denominator + this->denominator * other.numerator;
-		this->denominator *= other.denominator;
-		return this->to_proper();
-	}
-	Fraction operator-=(Fraction other)
-	{
-		this->to_improper();
-		other.to_improper();
-		this->numerator = numerator * other.denominator - this->denominator * other.numerator;
-		this->denominator *= other.denominator;
-		return this->to_proper();
 	}
 
 	Fraction reduce()
@@ -191,30 +225,7 @@ public:
 		else if (integer == 0)cout << 0;
 		cout << endl;
 	}
-	Fraction& operator++()
-	{
-		to_proper();
-		integer++;
-		return *this;
-	}
-	Fraction operator++(int)
-	{
-		to_proper();
-		Fraction buffer = *this;
-		integer++;
-		return buffer;
-	}
-	Fraction& operator--()
-	{
-		integer--;
-		return *this;
-	}
-	Fraction operator--(int)
-	{
-		Fraction buffer = *this;
-		integer--;
-		return buffer;
-	}
+	
 };
 
 ostream& operator<<(ostream& os, const Fraction& obj)
@@ -364,6 +375,9 @@ bool operator<=(const Fraction& left, const Fraction& right)
 //#define OSTREAM_CHECK
 //#define ARIFMETICAL_OPERATORS_CHECK
 //#define COMPARISON_OPERATORS
+//#define ISTREAM_OPERATOR_CHECK
+//#define TYPE_CONVERSION_BASICS
+//#define CONVERSION_FROM_OTHER_TO_CLASS
 
 void main()
 {
@@ -417,8 +431,40 @@ void main()
 	cout << (A < B) << endl;
 #endif // COMPARISON_OPERATORS
 
+#ifdef ISTREAM_OPERATOR_CHECK
 	Fraction A;
 	cout << "Введите дробь: ";
 	cin >> A;
 	cout << A << endl;
+#endif // ISTREAM_OPERATOR_CHECK
+
+#ifdef TYPE_CONVERSION_BASICS
+	int a = 2;
+	double b = 3;
+	int c = b;
+	int d = 4.5;
+	cout << d << endl;
+#endif // TYPE_CONVERSION_BASICS
+
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+	double a = 2;
+	Fraction A = (Fraction)5;
+	cout << A << endl;
+	cout << "\n-----------------------------\n";
+	Fraction B;
+	cout << "\n-----------------------------\n";
+	B = (Fraction)8;
+	cout << "\n-----------------------------\n";
+	cout << B << endl;
+
+	Fraction C(12); //explicit конструктор можно вызвать только так и нельзя Fraction C =12;
+	cout << C << endl;
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
+
+	Fraction A(2, 3, 4);
+	int a = (int)A;
+	cout << A << endl;
+	cout << a << endl;
+	double b = (double)A;
+	cout << b << endl;
 }
