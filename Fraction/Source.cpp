@@ -158,7 +158,7 @@ public:
 	{
 		return integer;
 	}
-	operator double()const
+	explicit operator double()const
 	{
 		return integer + (double)numerator / denominator;
 	}
