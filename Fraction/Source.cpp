@@ -54,6 +54,15 @@ public:
 		this->denominator = 1;
 		cout << "SingleConstructor:" << this << endl;
 	}
+	explicit Fraction(double dec)
+	{
+		integer = dec;
+		dec -= integer;
+		dec *= 1000;
+		numerator = dec;
+		denominator = 1000;
+		reduce();
+	}
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -467,4 +476,6 @@ void main()
 	cout << a << endl;
 	double b = (double)A;
 	cout << b << endl;
+	Fraction C = (Fraction)b;
+	cout << C << endl;
 }
