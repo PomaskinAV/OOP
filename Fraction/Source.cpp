@@ -54,13 +54,23 @@ public:
 		this->denominator = 1;
 		cout << "SingleConstructor:" << this << endl;
 	}
-	explicit Fraction(double dec)
+	/*explicit Fraction(double dec)
 	{
 		integer = dec;
 		dec -= integer;
 		dec *= 1000;
 		numerator = dec;
 		denominator = 1000;
+		reduce();
+	}*/
+	Fraction(double dec)
+	{
+		dec += 1e-11;
+		integer = dec; //сохраняем целую часть десятичной дроби
+		dec -= integer; //убираем целую часть издесятичной дроби
+		denominator = 1e+9; //1 * на 10 в 9 степени
+		numerator = dec * denominator;//умножаем дробную часть десятичной дроби на 1000000000
+		//и таким образом вся дробная часть переходит в целую часть. и сохраняем ее в числителе
 		reduce();
 	}
 	Fraction(int numerator, int denominator)
@@ -198,6 +208,11 @@ public:
 
 	Fraction reduce()
 	{
+		if (numerator == 0)
+		{
+			denominator = 1;
+			return *this;
+		}
 		int more;
 		int less;
 		int rest; //остаток от деления
@@ -387,6 +402,7 @@ bool operator<=(const Fraction& left, const Fraction& right)
 //#define ISTREAM_OPERATOR_CHECK
 //#define TYPE_CONVERSION_BASICS
 //#define CONVERSION_FROM_OTHER_TO_CLASS
+//#define CONVERSION_FROM_CLASS_TO_OTHER
 
 void main()
 {
@@ -470,6 +486,7 @@ void main()
 	cout << C << endl;
 #endif // CONVERSION_FROM_OTHER_TO_CLASS
 
+#ifdef CONVERSION_FROM_CLASS_TO_OTHER
 	Fraction A(2, 3, 4);
 	int a = (int)A;
 	cout << A << endl;
@@ -478,4 +495,14 @@ void main()
 	cout << b << endl;
 	Fraction C = (Fraction)b;
 	cout << C << endl;
+#endif // CONVERSION_FROM_CLASS_TO_OTHER
+
+	Fraction A = 2.76;
+	cout << A << endl;
+	Fraction B(2, 76, 100);
+	cout << B << endl;
+	cout << (A == B) << endl;
+
+	Fraction C(1, 3);
+	cout << C*3 << endl;
 }
