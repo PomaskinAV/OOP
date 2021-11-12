@@ -19,7 +19,11 @@ public:
 	}
 	String(const char* str) :String(strlen(str)+1) //Делегируем выделение памати конструктору по умолчанию
 	{
-		for (int i = 0; i < size; i++)this->str[i] = str[i];
+		//for (int i = 0; i < size; i++)this->str[i] = str[i];
+		strcpy(this->str, str); //strcpy - string copy
+		//strcpy(dst, src);
+		//dst - строка получатель
+		//src - строка источник
 		cout << "Constructor:\t\t" << this << endl;
 	}
 	String(const String& other) :String(other.str)
@@ -106,13 +110,16 @@ public:
 String operator+(const String& left, const String& right)
 {
 	String result (left.get_size() + right.get_size() - 1);
-	for (int i = 0; i < left.get_size(); i++)
-		//result.get_str()[i] = left.get_str()[i];
-	result[i] = left[i];
-	for (int i = 0; i < right.get_size(); i++)
-		//result.get_str()[i+left.get_size()-1] = right.get_str()[i];
-	result[i + left.get_size() - 1] = right[i];
-
+	//for (int i = 0; i < left.get_size(); i++)
+	//	//result.get_str()[i] = left.get_str()[i];
+	//result[i] = left[i];
+	//for (int i = 0; i < right.get_size(); i++)
+	//	//result.get_str()[i+left.get_size()-1] = right.get_str()[i];
+	//result[i + left.get_size() - 1] = right[i];
+	strcpy(result.get_str(), left.get_str());
+	strcat(result.get_str(), right.get_str());
+	//strcat - выполняет конкатенацию строк
+	//dst будет объединенная строка
 	return result;
 }
 
