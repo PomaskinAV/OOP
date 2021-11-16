@@ -15,6 +15,10 @@ public:
 	{
 		return cols;
 	}
+	const int* get_arr(int i)const
+	{
+		return arr[i];
+	}
 	// Constructors
 	Matrix(int rows = 2, int cols = 2)
 	{
@@ -42,6 +46,16 @@ public:
 		}*/
 		*this = other;
 		cout << "CopyConstructor:\t" << this << endl;
+	}
+	Matrix(Matrix&& other)
+	{
+		this->rows = other.rows;
+		this->cols = other.cols;
+		this->arr = other.arr;
+		other.arr = nullptr;
+		other.rows = 0;
+		other.cols = 0;
+		cout << "MoveConstructor:\t" << this << endl;
 	}
 	~Matrix()
 	{
@@ -79,7 +93,19 @@ public:
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
 	}
-
+	Matrix& operator=(Matrix&& other)
+	{
+		if (this == &other)return *this;
+		this->~Matrix();
+		this->rows = other.rows;
+		this->cols = other.cols;
+		this->arr = other.arr;
+		other.arr = nullptr;
+		other.rows = 0;
+		other.cols = 0;
+		cout << "MoveAssignment:\t" << this << endl;
+		return *this;
+	}
 	// Methods
 	void print()const
 	{
@@ -105,9 +131,22 @@ void main()
 			A[i][j] = rand() % 100;
 		}
 	}
-	A = A;
+	//A = A;
 	A.print();
-	Matrix B;
-	B = A; //Copy assingment
+	//Matrix B(std::move(A));
+	//B = A; //Copy assingment
+	//Matrix B;
+	//B = std::move(A);
+	//B.print();
+	//A.print();
+	Matrix B(3, 4);
+	for (int i = 0; i < B.get_rows(); i++)
+	{
+		for (int j = 0; j < B.get_cols(); j++)
+		{
+			B[i][j] = rand() % 100;
+		}
+	}
 	B.print();
+	
 }
