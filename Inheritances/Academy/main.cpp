@@ -1,4 +1,4 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<string>
 using namespace std;
 
@@ -47,7 +47,7 @@ public:
 	// Methods:
 	void print()const
 	{
-		cout << last_name << " " << first_name << " " << age << " ëåò.\n";
+		cout << last_name << " " << first_name << " " << age << " Ð»ÐµÑ‚.\n";
 	}
 };
 
@@ -86,7 +86,7 @@ public:
 	(
 		const string& last_name, const string& first_name, unsigned int age,
 		const string& speciality, const string& group, double rating
-	):Human(last_name, first_name, age)// Äåëèãèðóåì êîíñòðóêòîð áàçîâîãî êëàññà
+	):Human(last_name, first_name, age)// Ð”ÐµÐ»Ð¸Ð³Ð¸Ñ€ÑƒÐµÐ¼ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ Ð±Ð°Ð·Ð¾Ð²Ð¾Ð³Ð¾ ÐºÐ»Ð°ÑÑÐ°
 	{
 		set_speciality(speciality);
 		set_group(group);
@@ -101,9 +101,9 @@ public:
 	void print()const
 	{
 		Human::print();
-		cout << "Ñïåöèàëüíîñòü: " << speciality
-			<< ", ãðóïïà: " << group
-			<< ", óñïåâàåìîñòü: " << rating << endl;
+		cout << "Ð¡Ð¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ð¾ÑÑ‚ÑŒ: " << speciality
+			<< ", Ð³Ñ€ÑƒÐ¿Ð¿Ð°: " << group
+			<< ", ÑƒÑÐ¿ÐµÐ²Ð°ÐµÐ¼Ð¾ÑÑ‚ÑŒ: " << rating << endl;
 	}
 };
 
@@ -133,7 +133,7 @@ public:
 	(
 		const string& last_name, const string& first_name, unsigned int age,
 		const string& speciality, unsigned int experience
-	) :Human(last_name, first_name, age)// Äåëèãèðóåì êîíñòðóêòîð áàçîâîãî êëàññà
+	) :Human(last_name, first_name, age)// Ð”ÐµÐ»Ð¸Ð³Ð¸Ñ€ÑƒÐµÐ¼ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ Ð±Ð°Ð·Ð¾Ð²Ð¾Ð³Ð¾ ÐºÐ»Ð°ÑÑÐ°
 	{
 		set_speciality(speciality);
 		set_experience(experience);
@@ -147,8 +147,8 @@ public:
 	void print()const
 	{
 		Human::print();
-		cout << "Ñïåöèàëüíîñòü: " << speciality
-			<< ", îïûò ðàáîòû: " << experience << endl;
+		cout << "Ð¡Ð¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ð¾ÑÑ‚ÑŒ: " << speciality
+			<< ", Ð¾Ð¿Ñ‹Ñ‚ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹: " << experience << endl;
 	}
 };
 
@@ -169,7 +169,7 @@ public:
 	(
 		const string& last_name, const string& first_name, unsigned int age,
 		const string& speciality, const string& group, double rating, const string& diploma
-	) :Student(last_name, first_name, age, speciality, group, rating)// Äåëèãèðóåì êîíñòðóêòîð
+	) :Student(last_name, first_name, age, speciality, group, rating)// Ð”ÐµÐ»Ð¸Ð³Ð¸Ñ€ÑƒÐµÐ¼ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€
 	{
 		set_diploma(diploma);
 		cout << "GConstructor:\t" << this << endl;
@@ -182,7 +182,7 @@ public:
 	void print()const
 	{
 		Student::print();
-		cout << "Òåìà äèïëîìíîé ðàáîòû ðàáîòû: " << diploma << endl;
+		cout << "Ð¢ÐµÐ¼Ð° Ð´Ð¸Ð¿Ð»Ð¾Ð¼Ð½Ð¾Ð¹ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹: " << diploma << endl;
 	}
 };
 
@@ -195,6 +195,6 @@ public:
 		s.print();
 		Teacher t("Santa", "Claus", 45, "informatics", 20);
 		t.print();
-		Graduate g("Boris", "Jonson", 25, "Chemistry", "WW_03", 87, "Ìåòîäû è ñðåäñòâà êðèïòîãðàôè÷åñêîé çàùèòû èíôîðìàöèè");
+		Graduate g("Boris", "Jonson", 25, "Chemistry", "WW_03", 87, "ÐœÐµÑ‚Ð¾Ð´Ñ‹ Ð¸ ÑÑ€ÐµÐ´ÑÑ‚Ð²Ð° ÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð³Ñ€Ð°Ñ„Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ Ð·Ð°Ñ‰Ð¸Ñ‚Ñ‹ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ð¸");
 		g.print();
 	}
