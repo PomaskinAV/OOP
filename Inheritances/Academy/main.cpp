@@ -1,5 +1,6 @@
 ﻿#include<iostream>
 #include<string>
+#include<fstream>
 using namespace std;
 
 class Human
@@ -38,11 +39,11 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
-		cout << "HConstructor:\t" << this << endl;
+		//cout << "HConstructor:\t" << this << endl;
 	}
 	virtual ~Human()
 	{
-		cout << "HDestructor:\t" << this << endl;
+		//cout << "HDestructor:\t" << this << endl;
 	}
 	// Methods:
 	virtual void print()const
@@ -50,6 +51,13 @@ public:
 		cout << last_name << " " << first_name << " " << age << " лет.\n";
 	}
 };
+
+ostream& operator<<(ostream& os, const Human& obj)
+{
+	return os << obj.get_last_name() << " "
+		<< obj.get_first_name() << " "
+		<< obj.get_age() << " лет.";
+}
 
 class Student:public Human
 {
@@ -91,11 +99,11 @@ public:
 		set_speciality(speciality);
 		set_group(group);
 		set_rating(rating);
-		cout << "SConstructor:\t" << this << endl;
+		//cout << "SConstructor:\t" << this << endl;
 	}
 	~Student()
 	{
-		cout << "SDestructor:\t" << this << endl;
+		//cout << "SDestructor:\t" << this << endl;
 	}
 	// Methods:
 	void print()const
@@ -106,6 +114,14 @@ public:
 			<< ", успеваемость: " << rating << endl;
 	}
 };
+
+ostream& operator<<(ostream& os, const Student& obj)
+{
+	os << (Human)obj;
+	return os << ", спец:" << obj.get_speciality()
+		<< ", группа:" << obj.get_group()
+		<< ", успеваемость:" << obj.get_rating();
+}
 
 class Teacher :public Human
 {
@@ -137,11 +153,11 @@ public:
 	{
 		set_speciality(speciality);
 		set_experience(experience);
-		cout << "TConstructor:\t" << this << endl;
+		//cout << "TConstructor:\t" << this << endl;
 	}
 	~Teacher()
 	{
-		cout << "TDestructor:\t" << this << endl;
+		//cout << "TDestructor:\t" << this << endl;
 	}
 	// Methods:
 	void print()const
@@ -151,6 +167,13 @@ public:
 			<< ", опыт работы: " << experience << endl;
 	}
 };
+
+ostream& operator<<(ostream& os, const Teacher& obj)
+{
+	return
+		os << (Human)obj <<", спец:" << obj.get_speciality()
+		<< ", опыт преподавания:" << obj.get_experience();
+}
 
 class Graduate :public Student
 {
@@ -172,11 +195,11 @@ public:
 	) :Student(last_name, first_name, age, speciality, group, rating)// Делигируем конструктор
 	{
 		set_diploma(diploma);
-		cout << "GConstructor:\t" << this << endl;
+		//cout << "GConstructor:\t" << this << endl;
 	}
 	~Graduate()
 	{
-		cout << "GDestructor:\t" << this << endl;
+		//cout << "GDestructor:\t" << this << endl;
 	}
 	// Methods:
 	void print()const
@@ -185,6 +208,11 @@ public:
 		cout << "Тема дипломной работы работы: " << diploma << endl;
 	}
 };
+
+ostream& operator<<(ostream& os, const Graduate& obj)
+{
+	return os << (Student)obj << "Тема" << obj.get_diploma();
+}
 
 //#define INHERITANCE
 
@@ -201,7 +229,7 @@ public:
 		Graduate g("Boris", "Jonson", 25, "Chemistry", "WW_03", 87, "Методы и средства криптографической защиты информации");
 		g.print();
 #endif // INHERITANCE
-
+		
 		//Generalisation:
 		Human* group[] =
 		{
@@ -212,17 +240,52 @@ public:
 			new Graduate("Schraden", "Hank", 42, "Cryminalistic", "OBN", 96, "How to catch Heisenberg"),
 			new Teacher("Eistein", "Albert", 143, "Astronomy", 120),
 		};
-
+		ofstream fout("File.txt", std::ios_base::app);
 		//Specialisation
 		for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 		{
 			cout << "\n-----------------------------\n";
-			group[i]->print();
+			//group[i]->print();
+			//cout << *group[i] << endl;
+			//cout << typeid(*group[i]).name() << endl;
+			if (typeid(*group[i]) == typeid(Student)) cout << *dynamic_cast<Student*>(group[i]) << endl;
+			if (typeid(*group[i]) == typeid(Graduate)) cout << *dynamic_cast<Graduate*>(group[i]) << endl;
+			if (typeid(*group[i]) == typeid(Teacher)) cout << *dynamic_cast<Teacher*>(group[i]) << endl;
+
+			//fout << *group[i] << endl;
 		}
 		cout << "\n-----------------------------\n";
+		fout.close();
+
+
+
 
 		for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 		{
 			delete[] group[i];
 		}
+
+		cout << endl;
+
+
+		const int SIZE = 256;
+		char buffer[SIZE] = {};
+
+		ifstream fin("File.txt");
+		if (fin.is_open())
+		{
+			while (!fin.eof())//Пока НЕ конец файла
+			{
+				//fin >> buffer;
+				fin.getline(buffer, SIZE);
+				cout << buffer << endl;
+			}
+		}
+		else
+		{
+			cerr << "File not found" << endl;
+		}
+		fin.close();
+
+
 	}
