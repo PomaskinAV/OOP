@@ -1,6 +1,8 @@
 ﻿#include<iostream>
+#include<fstream>
 #include<string>
 using namespace std;
+#define tab "\t"
 
 class Human
 {
@@ -47,7 +49,9 @@ public:
 	// Methods:
 	virtual ostream& print(ostream& os)const
 	{
-		return os << last_name << " " << first_name << " " << age << " лет ";
+		cout.setf(ios::left);
+		cout.width(10);
+		return os << last_name << tab << first_name << tab << age;
 	}
 };
 
@@ -106,9 +110,10 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << "Специальность: " << speciality
-			<< ", группа: " << group
-			<< ", успеваемость: " << rating;
+		os << tab;
+		return os /*<< ", Специальность: "*/ << speciality << tab << tab << tab
+			/*<< ", группа: "*/ << group
+			/*<< ", успеваемость: "*/ << rating;
 	}
 };
 
@@ -151,9 +156,12 @@ public:
 	// Methods:
 	ostream& print(ostream& os)const
 	{
+		cout.setf(ios::left);
+		//cout.width(10);
 		Human::print(os);
-		return os << "Специальность: " << speciality
-			<< ", опыт работы: " << experience;
+		os << tab;
+		return os /*<< "Специальность: "*/ << speciality << tab
+			/*<< ", опыт работы: "*/ << experience;
 	}
 };
 
@@ -187,7 +195,9 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Student::print(os);
-		return os << "Тема дипломной работы работы: " << diploma;
+		cout.setf(ios::left);
+		cout.width(10);
+		return os /*<< "Тема дипломной работы работы: "*/ << tab << diploma;
 	}
 };
 
@@ -211,10 +221,10 @@ public:
 		Human* group[] =
 		{
 			new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 93),
-			new Student("Vercetti", "Tomas", 30, "Chemistry", "Vice", 90),
+			new Student("Verceti", "Tomas", 30, "Chemistry", "Vice", 90),
 			new Teacher("White", "Walter", 50, "Chemistry", 25),
-			new Student("Diaz", "Ricardo", 55, "Weapons dastribution", "Vice", 80),
-			new Graduate("Schraden", "Hank", 42, "Cryminalistic", "OBN", 96, "How to catch Heisenberg"),
+			new Student("Diaz", "Ricardo", 55, "Chemistry", "Vice", 80),
+			new Graduate("Albert", "Hankuk", 42, "Cryminalistic", "OBN", 96, "How to catch Heisenberg"),
 			new Teacher("Eistein", "Albert", 143, "Astronomy", 120),
 		};
 
@@ -227,8 +237,35 @@ public:
 		}
 		cout << "\n-----------------------------\n";
 
+		ofstream fout("group.txt");
+		for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
+		{
+			fout << *group[i] << endl;
+		}
+		fout.close();
+		system("notepad group.txt");
+
 		for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 		{
 			delete[] group[i];
 		}
+
+		const int SIZE = 256;
+		char buffer[SIZE] = {};
+
+		ifstream fin("group.txt");
+		if (fin.is_open())
+		{
+			while (!fin.eof())//Пока НЕ конец файла
+			{
+				//fin >> buffer;
+				fin.getline(buffer, SIZE);
+				cout << buffer << endl;
+			}
+		}
+		else
+		{
+			cerr << "File not found" << endl;
+		}
+		fin.close();
 	}

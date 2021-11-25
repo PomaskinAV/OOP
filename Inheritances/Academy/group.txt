@@ -1,0 +1,6 @@
+Pinkman	Jessie	22	Chemistry			WW_0193
+Verceti	Tomas	30	Chemistry			Vice90
+White	Walter	50	Chemistry	25
+Diaz	Ricardo	55	Chemistry			Vice80
+Albert	Hankuk	42	Cryminalistic			OBN96	How to catch Heisenberg
+Eistein	Albert	143	Astronomy	120
