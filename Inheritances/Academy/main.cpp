@@ -49,15 +49,63 @@ public:
 	// Methods:
 	virtual ostream& print(ostream& os)const
 	{
-		cout.setf(ios::left);
+		/*cout.setf(ios::left);
 		cout.width(10);
-		return os << last_name << tab << first_name << tab << age;
+		return os << last_name << tab << first_name << tab << age;*/
+		os.width(10);
+		os << std::left;
+		os << last_name;
+		os.width(10);
+		os << std::left;
+		os << first_name;
+		os.width(5);
+		os << std::left;
+		os << age;
+		return os;
+	}
+	virtual ofstream& print(ofstream& os)const
+	{
+		os.width(15);
+		os << left;
+		os << typeid(*this).name() << " | ";
+		/*cout.setf(ios::left);
+		cout.width(10);
+		return os << last_name << tab << first_name << tab << age;*/
+		os.width(10);
+		os << std::left;
+		os << last_name << "|";
+		os.width(10);
+		os << std::left;
+		os << first_name << "|";
+		os.width(5);
+		os << std::left;
+		os << age << "|";
+		return os;
+	}
+	virtual istream& input(istream& is)
+	{
+		return is >> last_name >> first_name >> age;
 	}
 };
 
 ostream& operator<<(ostream& os, const Human& obj)
 {
 	return obj.print(os);
+}
+ofstream& operator<<(ofstream& os, const Human& obj)
+{
+	return obj.print(os);
+}
+istream& operator>>(istream& is, Human& obj)
+{
+	/*string last_name, first_name;
+	int age;
+	is >> last_name >> first_name >> age;
+	obj.set_last_name(last_name);
+	obj.set_first_name(first_name);
+	obj.set_age(age);
+	return is;*/
+	return obj.input(is);
 }
 
 class Student:public Human
@@ -110,10 +158,50 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		os << tab;
-		return os /*<< ", Специальность: "*/ << speciality << tab << tab << tab
-			/*<< ", группа: "*/ << group
-			/*<< ", успеваемость: "*/ << rating;
+		//os << tab;
+		//return os /*<< ", Специальность: "*/ << speciality << tab << tab << tab
+		//	/*<< ", группа: "*/ << group
+		//	/*<< ", успеваемость: "*/ << rating;
+		os.width(25);
+		os << left;
+		os << speciality;
+		os.width(8);
+		os << left;
+		os << group;
+		os.width(5);
+		//os << right;
+		os << internal;
+		os << rating;
+		os << "%";
+		return os;
+	}
+	ofstream& print(ofstream& os)const
+	{
+		Human::print(os);
+		//os << tab;
+		//return os /*<< ", Специальность: "*/ << speciality << tab << tab << tab
+		//	/*<< ", группа: "*/ << group
+		//	/*<< ", успеваемость: "*/ << rating;
+		os.width(25);
+		os << left;
+		os << speciality << "|";
+		os.width(8);
+		os << left;
+		os << group << "|";
+		os.width(5);
+		//os << right;
+		os << internal;
+		os << rating;
+		os << "% |";
+		return os;
+	}
+	istream& input(istream& is)
+	{
+		Human::input(is);
+		is >> speciality;
+		is >> group;
+		is >> rating;
+		return is;
 	}
 };
 
@@ -156,12 +244,33 @@ public:
 	// Methods:
 	ostream& print(ostream& os)const
 	{
-		cout.setf(ios::left);
+		/*cout.setf(ios::left);*/
 		//cout.width(10);
 		Human::print(os);
-		os << tab;
-		return os /*<< "Специальность: "*/ << speciality << tab
-			/*<< ", опыт работы: "*/ << experience;
+		//os << tab;
+		//return os /*<< "Специальность: "*/ << speciality << tab
+		//	/*<< ", опыт работы: "*/ << experience;
+		os.width(33);
+		os << speciality;
+		os.width(5);
+		os << right;
+		os << experience << "y";
+		return os;
+	}
+	ofstream& print(ofstream& os)const
+	{
+		/*cout.setf(ios::left);*/
+		//cout.width(10);
+		Human::print(os);
+		//os << tab;
+		//return os /*<< "Специальность: "*/ << speciality << tab
+		//	/*<< ", опыт работы: "*/ << experience;
+		os.width(33);
+		os << speciality << " | ";
+		os.width(5);
+		os << right;
+		os << experience << "y|";
+		return os;
 	}
 };
 
@@ -195,13 +304,27 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Student::print(os);
-		cout.setf(ios::left);
-		cout.width(10);
-		return os /*<< "Тема дипломной работы работы: "*/ << tab << diploma;
+		//cout.setf(ios::left);
+		//cout.width(10);
+		//return os /*<< "Тема дипломной работы работы: "*/ << tab << diploma;
+		return os << left << " " << diploma;
+	}
+	ofstream& print(ofstream& os)const
+	{
+		Student::print(os);
+		//cout.setf(ios::left);
+		//cout.width(10);
+		//return os /*<< "Тема дипломной работы работы: "*/ << tab << diploma;
+		os << left << " " << diploma;
+		return os;
 	}
 };
 
+void SaveToFile(const Human* group[], const int size, const string& filename);
+Human** LoadFromFile(const std::string& filename);
+
 //#define INHERITANCE
+//#define OUTPUT_CHECK
 
 	void main()
 	{
@@ -217,11 +340,12 @@ public:
 		g.print();
 #endif // INHERITANCE
 
+#ifdef OUTPUT_CHECK
 		//Generalisation:
 		Human* group[] =
 		{
-			new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 93),
-			new Student("Verceti", "Tomas", 30, "Chemistry", "Vice", 90),
+			new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 5),
+			new Student("Verceti", "Tomas", 30, "Chemistry", "Vice", 100),
 			new Teacher("White", "Walter", 50, "Chemistry", 25),
 			new Student("Diaz", "Ricardo", 55, "Chemistry", "Vice", 80),
 			new Graduate("Albert", "Hankuk", 42, "Cryminalistic", "OBN", 96, "How to catch Heisenberg"),
@@ -237,35 +361,70 @@ public:
 		}
 		cout << "\n-----------------------------\n";
 
-		ofstream fout("group.txt");
+		/*ofstream fout("group.txt");
 		for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 		{
 			fout << *group[i] << endl;
 		}
 		fout.close();
-		system("notepad group.txt");
+		system("notepad group.txt");*/
+		string filename = "group.txt";
+		SaveToFile(group, sizeof(group) / sizeof(group[0]), "group.txt");
+		system((string("notepad ")+ filename).c_str());
 
 		for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 		{
 			delete[] group[i];
 		}
 
-		const int SIZE = 256;
-		char buffer[SIZE] = {};
+#endif // OUTPUT_CHECK
 
-		ifstream fin("group.txt");
+		/*Human human("last_name", "first_name", 0);
+		cout << "Кто к нам пришел: ";
+		cin >> human;
+		cout << human << endl;*/
+		/*Student stud("", "", 0, "", "", 0);
+		cout << "Кто к нам пришел: ";
+		cin >> stud;
+		cout << stud << endl;*/
+
+		LoadFromFile("group.txt");
+	}
+
+	void SaveToFile(const Human* group[], const int size, const string& filename)
+	{
+		ofstream fout(filename);
+		for (int i = 0; i < size; i++)
+		{
+			fout << *group[i] << endl;
+		}
+		fout.close();
+	}
+	Human** LoadFromFile(const std::string& filename)
+	{
+		ifstream fin(filename);
 		if (fin.is_open())
 		{
-			while (!fin.eof())//Пока НЕ конец файла
+			std::string buffer;
+			int n = 0;
+			while (!fin.eof())
 			{
-				//fin >> buffer;
-				fin.getline(buffer, SIZE);
+				std::getline(fin, buffer);
+				n++;
+			}
+			Human** group = new Human * [n] {};
+			fin.clear();
+			fin.seekg(0);
+			for (int i = 0; i < n; i++)
+			{
+				std::getline(fin, buffer);
 				cout << buffer << endl;
 			}
+		fin.close();
 		}
 		else
 		{
-			cerr << "File not found" << endl;
+			cerr << "Error: File not found!" << endl;
 		}
-		fin.close();
+		return nullptr;
 	}
