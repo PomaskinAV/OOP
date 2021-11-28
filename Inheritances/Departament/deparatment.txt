@@ -1,0 +1,4 @@
+class Accounting | Pinkman   |Jessie    |22   |Accountant               |12   |   15000|
+class Logistics | White     |Walter    |50   |Driver                   |   25y|180  |1000 |
+class Accounting | Diaz      |Ricardo   |55   |Chief accountant         |34   |   30000|
+class Logistics | Eistein   |Albert    |54   |Driver                   |   25y|180  |1500 |
