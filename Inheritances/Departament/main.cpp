@@ -62,13 +62,13 @@ public:
 	}
 	virtual ofstream& print(ofstream& os)const
 	{
-		os.width(15);
+		os.width(16);
 		os << left;
 		os << typeid(*this).name() << " | ";
 		os.width(10);
 		os << std::left;
 		os << last_name << "|";
-		os.width(10);
+		os.width(15);
 		os << std::left;
 		os << first_name << "|";
 		os.width(5);
@@ -158,29 +158,29 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		os.width(25);
+		os.width(16);
 		os << left;
 		os << post;
-		os.width(5);
-		os << left;
-		os << experience;
 		os.width(8);
-		os << internal;
-		os << salary;
+		os << right;
+		os << experience << "y";
+		os.width(40);
+		os << right;
+		os << salary << "rub";
 		return os;
 	}
 	ofstream& print(ofstream& os)const
 	{
 		Human::print(os);
-		os.width(25);
+		os.width(16);
 		os << left;
 		os << post << "|";
-		os.width(5);
-		os << left;
-		os << experience << "|";
 		os.width(8);
-		os << internal;
-		os << salary << "|";
+		os << right;
+		os << experience << "y|";
+		os.width(42);
+		os << right;
+		os << salary << "rub|";
 		return os;
 	}
 	istream& input(istream& is)
@@ -195,7 +195,9 @@ public:
 	{
 		Human::input(is);
 		std::getline(is, post, '|');
-		//std::getline(is, experience, '|');
+		string xp_buffer;
+		std::getline(is, xp_buffer, '|');
+		experience = std::stod(xp_buffer);
 		string salary_buffer;
 		std::getline(is, salary_buffer, '|');
 		this->salary = std::stod(salary_buffer);
@@ -209,6 +211,7 @@ class Logistics :public Human
 	unsigned int experience;
 	double time_worked;
 	double norm_hour;
+	double salary;
 public:
 	const string& get_post()const
 	{
@@ -226,6 +229,10 @@ public:
 	{
 		return norm_hour;
 	}
+	double get_salary()const
+	{
+		return salary;
+	}
 	void set_post(const string& post)
 	{
 		this->post = post;
@@ -242,6 +249,10 @@ public:
 	{
 		this->norm_hour = norm_hour;
 	}
+	void set_salary(double salary)
+	{
+		this->salary = salary;
+	}
 	// Constructors:
 	Logistics
 	(
@@ -253,56 +264,70 @@ public:
 		set_experience(experience);
 		set_time_worked(time_worked);
 		set_norm_hour(norm_hour);
-		cout << "TConstructor:\t" << this << endl;
+		set_salary(salary);
+		cout << "LConstructor:\t" << this << endl;
 	}
 	~Logistics()
 	{
-		cout << "TDestructor:\t" << this << endl;
+		cout << "LDestructor:\t" << this << endl;
 	}
 	// Methods:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		os.width(25);
+		os.width(16);
+		os << left;
 		os << post;
-		os.width(5);
+		os.width(8);
 		os << right;
 		os << experience << "y";
-		os.width(5);
-		os << left;
-		os << time_worked;
-		os.width(5);
-		os << left;
-		os << norm_hour;
+		os.width(8);
+		os << right;
+		os << time_worked << "hour";
+		os.width(8);
+		os << right;
+		os << norm_hour << "rub/hour";
+		os.width(8);
+		os << right;
+		os << salary << "rub";
 		return os;
 	}
 	ofstream& print(ofstream& os)const
 	{
 		Human::print(os);
-		os.width(25);
+		os.width(16);
+		os << left;
 		os << post << "|";
-		os.width(5);
+		os.width(8);
 		os << right;
 		os << experience << "y|";
-		os.width(5);
-		os << left;
-		os << time_worked << "|";
-		os.width(5);
-		os << left;
-		os << norm_hour << "|";
+		os.width(8);
+		os << right;
+		os << time_worked << "hour|";
+		os.width(8);
+		os << right;
+		os << norm_hour << "rub/hour|";
+		os.width(10);
+		os << right;
+		os << salary << "rub|";
 		return os;
 	}
 	ifstream& input(ifstream& is)
 	{
 		Human::input(is);
 		std::getline(is, post, '|');
-		std::getline(is, experience, '|');
+		string xp_buffer;
+		std::getline(is, xp_buffer, '|');
+		experience = std::stod(xp_buffer);
 		string time_worked_buffer;
 		std::getline(is, time_worked_buffer, '|');
 		this->time_worked = std::stod(time_worked_buffer);
 		string norm_hour_buffer;
 		std::getline(is, norm_hour_buffer, '|');
 		this->norm_hour = std::stod(norm_hour_buffer);
+		string salary_buffer;
+		std::getline(is, salary_buffer, '|');
+		this->salary = std::stod(salary_buffer);
 		return is;
 	}
 };
@@ -312,12 +337,12 @@ void Print(Human* group[], const int size);
 Human** LoadFromFile(const std::string& filename);
 Human* HumanFactory(const std::string& human_type);
 
-#define OUTPUT_CHECK
+#define DEPARTAMENT
 
 void main()
 {
 	setlocale(LC_ALL, "");
-#ifdef OUTPUT_CHECK
+#ifdef DEPARTAMENT
 	//Generalisation:
 	Human* group[] =
 	{
@@ -326,7 +351,7 @@ void main()
 		new Accounting("Diaz", "Ricardo", 55, "Chief accountant", 34, 30000),
 		new Logistics("Eistein", "Albert", 54, "Driver", 25, 180, 1500),
 	};
-
+	
 	//Specialisation
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
@@ -343,9 +368,9 @@ void main()
 		delete[] group[i];
 	}
 
-#endif // OUTPUT_CHECK
+#endif // DEPARTAMENT
 
-	//Human** group = LoadFromFile("group.txt");
+	//Human** group = LoadFromFile("deparatment.txt");
 	//Print(group, 6);
 }
 
